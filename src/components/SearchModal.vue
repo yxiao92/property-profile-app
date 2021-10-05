@@ -186,7 +186,6 @@ export default {
         // document.getElementById("property-info").classList.add("overflow:hidden");
         // document.body.classList.add("overflow-y-hidden");
         // console.log(document.getElementById("app"))
-
       }
       // document.getElementById("property-info").classList.remove("overflow-hidden");
       searchText.value = "";
@@ -207,6 +206,7 @@ export default {
       } else {
         const results = await getPropertyAddress(searchText.value, 5);
         if (results.length > 0) {
+          // const filteredResults = filterNSWAddresses(results, 5);
           searchResults.value = results;
           cursor.value = 0;
           showResults.value = true;
@@ -243,6 +243,19 @@ export default {
       showResults.value = false;
       toggleModal();
     };
+
+    // const filterNSWAddresses = (searchResults, size) => {
+    //   console.log("Original results: ", searchResults);
+    //   const filteredResults = searchResults
+    //     .filter((r) => {
+    //       // r.addressComponents.state == "NSW" 
+    //       r.relativeScore >= 50
+    //     })
+    //     .sort((a, b) => (a.relativeScore <= b.relativeScore && 1) || -1)
+    //     .slice(0, size);
+    //   console.log("Filtered results: ", filteredResults);
+    //   return filteredResults;
+    // };
 
     // const searchText = computed({
     //   get() {
