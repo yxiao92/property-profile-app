@@ -1,0 +1,40 @@
+{
+  "type": "Feature",
+  "id": "GANSW713196590",
+  "properties": {
+    "lotDetails": {
+      "cadid": "102869405",
+      "lotNumber": null,
+      "sectionNumber": null,
+      "planNumber": "9921",
+      "planLabel": "SP9921",
+      "lotId": "//SP9921",
+      "primarySecondary": "S",
+      "suburb": "SUMMER HILL",
+      "postcode": "2130",
+      "lotArea": 628.82
+    },
+    "schoolCatchment": [
+      { "catchType": "INFANTS", "schoolName": "Yeo Park IS" },
+      { "catchType": "HIGH_GIRLS", "schoolName": "Burwood GHS" },
+      { "catchType": "HIGH_BOYS", "schoolName": "Ashfield BHS" },
+      { "catchType": "PRIMARY", "schoolName": "Summer Hill PS" }
+    ],
+    "noise": null
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [151.138633881, -33.893851232],
+        [151.138622005, -33.894004417],
+        [151.138222668, -33.893972227],
+        [151.138227132, -33.893914723],
+        [151.138234859, -33.893820244],
+        [151.138306455, -33.89382563],
+        [151.138470961, -33.893838781],
+        [151.138633881, -33.893851232]
+      ]
+    ]
+  }
+}
