@@ -169,6 +169,8 @@ import { getPropertyAddress } from "./domainAPI.js";
 export default {
   name: "SearchModal",
   setup() {
+    // TODO:
+    // show NSW addresses only
     const store = inject("store");
     const showModal = ref(false);
     const cursor = ref(-1);
