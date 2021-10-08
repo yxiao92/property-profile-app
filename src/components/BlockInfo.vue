@@ -10,7 +10,7 @@
       <div class="p-8 my-auto space-y-2">
         <!-- Plan Details -->
         <div class="flex text-indigo-500">
-          <i class="flex justify-center w-5 fas fa-map-marked text-base"></i>
+          <i class="flex w-5 fas fa-map-marked text-base"></i>
 
           <div class="flex flex-col px-2">
             <h3 class="mb-1 text-md font-medium">Plan details</h3>
@@ -21,7 +21,7 @@
         </div>
         <!-- Zoning -->
         <div class="flex text-indigo-500">
-          <i class="flex justify-center w-5 fas fa-layer-group text-base"></i>
+          <i class="flex w-5 fas fa-layer-group text-base"></i>
 
           <div class="flex flex-col px-2">
             <h3 class="mb-1 text-md font-medium">Land zoning</h3>
@@ -36,7 +36,7 @@
         </div>
         <!-- LGA -->
         <div class="flex text-indigo-500">
-          <i class="flex justify-center w-5 fas fa-info-circle text-base"></i>
+          <i class="flex w-5 fas fa-info-circle text-base"></i>
 
           <div class="flex flex-col px-2">
             <h3 class="mb-1 text-md font-medium">Local government area</h3>
@@ -47,7 +47,7 @@
         </div>
         <!-- LEP -->
         <div class="flex text-indigo-500">
-          <i class="flex justify-center w-5 fas fa-pencil-ruler text-base"></i>
+          <i class="flex w-5 fas fa-pencil-ruler text-base"></i>
 
           <div class="flex flex-col px-2">
             <h3 class="mb-1 text-md font-medium">Local environmental plan</h3>
@@ -67,6 +67,8 @@
 <script>
 import { ref, toRefs, onMounted, watch } from "vue";
 import L from "leaflet";
+
+import { processLotInfo } from "../helpers/block-info-details.js";
 
 export default {
   name: "BlockInfo",
@@ -102,36 +104,12 @@ export default {
 
       watch([loadingStatus, customData], () => {
         if (!loadingStatus.value && customData.value.id != undefined) {
-          // format plan details
-          let lotNumber =
-            customData.value.properties.planDetails.lotNumber ?? "-";
-          let sectionNumber =
-            customData.value.properties.planDetails.sectionNumber ?? "-";
-          let planLabel =
-            customData.value.properties.planDetails.planLabel ?? "-";
-
-          planDetails.value = lotNumber + "/" + sectionNumber + "/" + planLabel;
-
-          // format zoning code & LGA name
-          // get unique LEPs
-          const zoningCodeSet = new Set();
-          const lgaNameSet = new Set();
-          const epiNameSet = new Set();
-          customData.value.properties.zoning.forEach((el) => {
-            let lgaNameStr = el.lgaName
-              .toLowerCase()
-              .replace(/(^\w|\s\w)/g, (m) => m.toUpperCase());
-            lgaNameSet.add(lgaNameStr);
-
-            let zoningStr = el.zoningCode + " (" + el.zoningClass + ")";
-            zoningCodeSet.add(zoningStr);
-
-            epiNameSet.add(el.epiName);
-          });
-          // sort zoning codes & LEPs
-          zoningCode.value = [...zoningCodeSet].sort();
-          lgaName.value = [...lgaNameSet].sort();
-          epiName.value = [...epiNameSet].sort();
+          // get lot details
+          const lotInfo = processLotInfo(customData.value.properties);
+          planDetails.value = lotInfo.planDetails;
+          zoningCode.value = lotInfo.zoningCode;
+          lgaName.value = lotInfo.lgaName;
+          epiName.value = lotInfo.epiName;
 
           // move map to address
           lotMap.setView([addressCoord.value.lat, addressCoord.value.lon]);

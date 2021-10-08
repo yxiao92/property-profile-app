@@ -87,8 +87,8 @@
 <script>
 import { inject, watch } from "vue";
 // import { inject, onMounted } from "vue";
-import { getPropertyData } from "./domainAPI.js";
-import { getLotData } from "./customAPI.js";
+import { getPropertyData } from "../helpers/domain.api.js";
+import { getLotData } from "../helpers/custom.api.js";
 // import axios from "axios";
 
 // import { inject, onMounted } from "vue";

@@ -164,7 +164,7 @@
 <script>
 import { ref, inject } from "vue";
 import { debounce } from "lodash";
-import { getPropertyAddress } from "./domainAPI.js";
+import { getPropertyAddress } from "../helpers/domain.api.js";
 
 export default {
   name: "SearchModal",

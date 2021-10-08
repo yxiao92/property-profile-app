@@ -41,6 +41,11 @@
         :loading-status="store.state.isLoading"
         :custom-data="store.state.customData"
       />
+      <AreaInfo
+        :address-coord="store.state.addressCoord"
+        :loading-status="store.state.isLoading"
+        :custom-data="store.state.customData"
+      />
     </main>
     <!-- <footer class="bg-blue-300 h-20"></footer> -->
   </body>
@@ -52,16 +57,18 @@ import { inject, watch } from "vue";
 import SearchModal from "../components/SearchModal.vue";
 import PropertySummary from "../components/PropertySummary.vue";
 import BlockInfo from "../components/BlockInfo.vue";
+import AreaInfo from "../components/AreaInfo.vue";
 
-import { getPropertyData } from "../components/domainAPI.js";
-import { getLotData } from "../components/customAPI.js";
+import { getPropertyData } from "../helpers/domain.api.js";
+import { getLotData } from "../helpers/custom.api.js";
 
 export default {
   name: "PropertyProfile",
   components: {
     SearchModal,
-    BlockInfo,
     PropertySummary,
+    BlockInfo,
+    AreaInfo,
   },
   setup() {
     const store = inject("store");
