@@ -34,6 +34,29 @@
             </p>
           </div>
         </div>
+        <!-- Easement -->
+        <div class="flex text-indigo-500">
+          <i class="flex w-5 fas fa-road text-base"></i>
+
+          <div class="flex flex-col px-2">
+            <h3 class="mb-1 text-md font-medium">Easement</h3>
+            <p class="text-sm text-gray-800">
+              No easement recorded in our
+              database
+            </p>
+          </div>
+        </div>
+        <!-- Heritage -->
+        <div class="flex text-indigo-500">
+          <i class="flex w-5 fas fa-medal text-base"></i>
+
+          <div class="flex flex-col px-2">
+            <h3 class="mb-1 text-md font-medium">Heritage status</h3>
+            <p class="text-sm text-gray-800">
+              No heritage listing recorded in our database
+            </p>
+          </div>
+        </div>
         <!-- LGA -->
         <div class="flex text-indigo-500">
           <i class="flex w-5 fas fa-info-circle text-base"></i>

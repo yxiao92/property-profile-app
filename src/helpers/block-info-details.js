@@ -34,4 +34,22 @@ const processLotInfo = (data) => {
   };
 };
 
+// const processEasementInfo = (data) => {
+//   // 15 Boomerang Ave, Albion Park Rail NSW
+//   // GNAF PID GANSW719151863
+//   const easementSet = new Set();
+//   data.easement.forEach((el) => {
+//     let easementType = el.lgaName
+//       .toLowerCase()
+//       .replace(/(^\w|\s\w)/g, (m) => m.toUpperCase());
+
+//     easementSet.add(easementType);
+//   });
+//   // sort zoning codes & LEPs
+//   const easementArr = [...easementSet].sort();
+
+//   return easementArr;
+// };
+
+
 export { processLotInfo };

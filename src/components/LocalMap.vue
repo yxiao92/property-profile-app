@@ -34,10 +34,15 @@ export default {
         }
       ).addTo(localMap);
 
+      // marker layers
+
+      const layerGroup = L.layerGroup().addTo(localMap);
       if (!loadingStatus.value && addressCoord.value.lon != undefined) {
         localMap.setView([addressCoord.value.lat, addressCoord.value.lon]);
-        
-        L.marker([addressCoord.value.lat, addressCoord.value.lon]).addTo(localMap);
+        layerGroup.clearLayers();
+        L.marker([addressCoord.value.lat, addressCoord.value.lon]).addTo(
+          layerGroup
+        );
       }
     });
   },

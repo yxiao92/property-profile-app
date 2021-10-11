@@ -1,7 +1,10 @@
+const copySorted = (arr, key) =>
+  [...arr].sort((a, b) => (a[key] > b[key] && 1) || -1);
+
 const processNoiseInfo = (noiseObj) => {
   // template
   const noiseInfoStr =
-    "The property is located ${dist} ${place}. It is ${freq} to experience ${degree} traffic noise.";
+    "The site is located ${dist} ${place}. It is ${freq} to experience ${degree} traffic noise.";
 
   const replaceStr = (str, obj) =>
     str
@@ -40,8 +43,59 @@ const processNoiseInfo = (noiseObj) => {
       degree: "some degree of",
     });
   }
-  console.log(noiseInfoObj);
+  // console.log(noiseInfoObj);
   return noiseInfoObj;
 };
 
-export { processNoiseInfo };
+const processPowerLinesInfo = (obj) => {
+  const pluraliseWord = (cnt) => (cnt > 1 ? "lines" : "line");
+
+  let pLInfoObj = {};
+  // voltage and distance of each HV power line
+  if (obj == null) {
+    pLInfoObj.pLCnt = 0;
+    pLInfoObj.pLDesc = "The site doesn't have high voltage power lines nearby.";
+  } else {
+    let pLInfoArr = [];
+    // sort by power line distance
+    copySorted(obj, "distance").forEach((el) => {
+      let pLStr = `${el.voltage} (${el.distance}m)`;
+      pLInfoArr.push(pLStr);
+    });
+
+    const pLCnt = pLInfoArr.length;
+    const pLDetails = pLInfoArr.join(", ");
+    const pLDesc = `The site is located near ${pLCnt} high voltage power ${pluraliseWord(
+      pLCnt
+    )}: ${pLDetails}.`;
+    pLInfoObj.pLCnt = pLCnt;
+    pLInfoObj.pLDesc = pLDesc;
+  }
+  // console.log(pLInfoObj);
+  return pLInfoObj;
+};
+
+// acid sulfate soils
+const processASSInfo = (obj) => {
+  let assInfoObj = {};
+
+  if (obj == null) {
+    assInfoObj.assCnt = 0;
+    assInfoObj.assDesc =
+      ["The site doesn't appear to be in an acid sulfate soil area."];
+  } else {
+    let assInfoArr = [];
+
+    copySorted(obj, "soilClass").forEach((el) => {
+      let assStr = `${el.soilClass} - ${el.classDesc}`;
+      assInfoArr.push(assStr);
+    });
+
+    assInfoObj.assCnt = assInfoArr.length;
+    assInfoObj.assDesc = assInfoArr;
+  }
+  console.log(assInfoObj);
+  return assInfoObj;
+};
+
+export { processNoiseInfo, processPowerLinesInfo, processASSInfo };
