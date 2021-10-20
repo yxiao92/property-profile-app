@@ -1,55 +1,67 @@
-const processLotInfo = (data) => {
+const processPlanDetailsInfo = (obj) => {
   // format plan details
-  const lotNumber = data.planDetails.lotNumber ?? "-";
-  const sectionNumber = data.planDetails.sectionNumber ?? "-";
-  const planLabel = data.planDetails.planLabel ?? "-";
+  const lotNumber = obj.lotNumber ?? "-";
+  const sectionNumber = obj.sectionNumber ?? "-";
+  const planLabel = obj.planLabel ?? "-";
   const planDetails = lotNumber + "/" + sectionNumber + "/" + planLabel;
 
-  // format zoning code & LGA name
-  // get unique LEPs
-  const zoningCodeSet = new Set();
-  const lgaNameSet = new Set();
-  const epiNameSet = new Set();
-  data.zoning.forEach((el) => {
-    let lgaNameStr = el.lgaName
-      .toLowerCase()
-      .replace(/(^\w|\s\w)/g, (m) => m.toUpperCase());
-    lgaNameSet.add(lgaNameStr);
-
-    let zoningStr = el.zoningCode + " (" + el.zoningClass + ")";
-    zoningCodeSet.add(zoningStr);
-
-    epiNameSet.add(el.epiName);
-  });
-  // sort zoning codes & LEPs
-  const zoningCode = [...zoningCodeSet].sort();
-  const lgaName = [...lgaNameSet].sort();
-  const epiName = [...epiNameSet].sort();
-
-  return {
-    planDetails: planDetails,
-    zoningCode: zoningCode,
-    lgaName: lgaName,
-    epiName: epiName,
-  };
+  return planDetails;
 };
 
-// const processEasementInfo = (data) => {
-//   // 15 Boomerang Ave, Albion Park Rail NSW
-//   // GNAF PID GANSW719151863
-//   const easementSet = new Set();
-//   data.easement.forEach((el) => {
-//     let easementType = el.lgaName
-//       .toLowerCase()
-//       .replace(/(^\w|\s\w)/g, (m) => m.toUpperCase());
+const processZoningInfo = (arr) => {
+  // zoning info can be null
+  if (arr != null) {
+    // format zoning code & LGA name
+    // get unique LEPs
+    const zoningCodeSet = new Set();
+    const lgaNameSet = new Set();
+    const epiNameSet = new Set();
+    arr.forEach((el) => {
+      let lgaNameStr = el.lgaName
+        .toLowerCase()
+        .replace(/(^\w|\s\w)/g, (m) => m.toUpperCase());
+      lgaNameSet.add(lgaNameStr);
 
-//     easementSet.add(easementType);
-//   });
-//   // sort zoning codes & LEPs
-//   const easementArr = [...easementSet].sort();
+      let zoningStr = el.zoningCode + " (" + el.zoningClass + ")";
+      zoningCodeSet.add(zoningStr);
 
-//   return easementArr;
-// };
+      epiNameSet.add(el.epiName);
+    });
+    // sort zoning codes & LEPs
+    const zoningCode = [...zoningCodeSet].sort();
+    const lgaName = [...lgaNameSet].sort();
+    const epiName = [...epiNameSet].sort();
 
+    return {
+      zoningCode: zoningCode,
+      lgaName: lgaName,
+      epiName: epiName,
+    };
+  }
+};
 
-export { processLotInfo };
+const processMinLotSizeInfo = (arr) => {
+  const unitOrd = {
+    "m²": 1,
+    ha: 2,
+  };
+  if (arr != null) {
+    const arrSorted = [...arr]
+      .map((el) => ({
+        ...el,
+        unitOrd: unitOrd[el.unit],
+      }))
+      .sort((a, b) => {
+        if (a.unitOrd === b.unitOrd) {
+          // lot size only matters when unit order is the same
+          return a.lotSize - b.lotSize;
+        }
+        return a.unitOrd - b.unitOrd;
+      })
+      .map((el) => el.lotSize + el.unit);
+
+    return [...new Set(arrSorted)];
+  }
+};
+
+export { processPlanDetailsInfo, processZoningInfo, processMinLotSizeInfo };

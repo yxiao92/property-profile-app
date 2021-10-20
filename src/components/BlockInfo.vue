@@ -1,5 +1,7 @@
 <template>
-  <h2 class="max-w-md text-lg p-2 font-medium">Block information</h2>
+  <h2 class="max-w-md mx-auto md:mx-0 text-lg p-2 font-medium">
+    Block information
+  </h2>
   <div
     class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl"
   >
@@ -14,8 +16,11 @@
 
           <div class="flex flex-col px-2">
             <h3 class="mb-1 text-md font-medium">Plan details</h3>
-            <p class="text-sm text-gray-800">
-              {{ planDetails }}
+            <i v-if="!blockInfoState.planDetails" class="text-xs text-gray-600">
+              Information not available
+            </i>
+            <p v-else class="text-sm text-gray-800">
+              {{ blockInfoState.planDetails }}
             </p>
           </div>
         </div>
@@ -25,36 +30,37 @@
 
           <div class="flex flex-col px-2">
             <h3 class="mb-1 text-md font-medium">Land zoning</h3>
-            <p
-              v-for="(z, i) in zoningCode"
-              :key="i"
-              class="text-sm text-gray-800"
-            >
-              {{ z }}
-            </p>
+            <i v-if="!blockInfoState.zoningInfo" class="text-xs text-gray-600">
+              Information not available
+            </i>
+            <div v-else class="text-sm text-gray-800">
+              <p
+                v-for="(z, i) in blockInfoState.zoningInfo.zoningCode"
+                :key="i"
+              >
+                {{ z }}
+              </p>
+            </div>
           </div>
         </div>
-        <!-- Easement -->
+        <!-- Min Lot Size -->
         <div class="flex text-indigo-500">
-          <i class="flex w-5 fas fa-road text-base"></i>
+          <i class="flex w-5 fas fa-ruler-combined text-base"></i>
 
           <div class="flex flex-col px-2">
-            <h3 class="mb-1 text-md font-medium">Easement</h3>
-            <p class="text-sm text-gray-800">
-              No easement recorded in our
-              database
-            </p>
-          </div>
-        </div>
-        <!-- Heritage -->
-        <div class="flex text-indigo-500">
-          <i class="flex w-5 fas fa-medal text-base"></i>
-
-          <div class="flex flex-col px-2">
-            <h3 class="mb-1 text-md font-medium">Heritage status</h3>
-            <p class="text-sm text-gray-800">
-              No heritage listing recorded in our database
-            </p>
+            <h3 class="mb-1 text-md font-medium">Minimum lot size</h3>
+            <i v-if="!blockInfoState.minLotSize" class="text-xs text-gray-600">
+              Information not available
+            </i>
+            <div v-else>
+              <p
+                v-for="(lsz, i) in blockInfoState.minLotSize"
+                :key="i"
+                class="text-sm text-gray-800"
+              >
+                {{ lsz }}
+              </p>
+            </div>
           </div>
         </div>
         <!-- LGA -->
@@ -63,9 +69,14 @@
 
           <div class="flex flex-col px-2">
             <h3 class="mb-1 text-md font-medium">Local government area</h3>
-            <p v-for="(l, i) in lgaName" :key="i" class="text-sm text-gray-800">
-              {{ l }}
-            </p>
+            <i v-if="!blockInfoState.zoningInfo" class="text-xs text-gray-600">
+              Information not available
+            </i>
+            <div v-else class="text-sm text-gray-800">
+              <p v-for="(l, i) in blockInfoState.zoningInfo.lgaName" :key="i">
+                {{ l }}
+              </p>
+            </div>
           </div>
         </div>
         <!-- LEP -->
@@ -74,13 +85,14 @@
 
           <div class="flex flex-col px-2">
             <h3 class="mb-1 text-md font-medium">Local environmental plan</h3>
-            <p
-              v-for="(epi, i) in epiName"
-              :key="i"
-              class="text-sm text-gray-800"
-            >
-              {{ epi }}
-            </p>
+            <i v-if="!blockInfoState.zoningInfo" class="text-xs text-gray-600">
+              Information not available
+            </i>
+            <div v-else class="text-sm text-gray-800">
+              <p v-for="(epi, i) in blockInfoState.zoningInfo.epiName" :key="i">
+                {{ epi }}
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -91,17 +103,23 @@
 import { ref, toRefs, onMounted, watch } from "vue";
 import L from "leaflet";
 
-import { processLotInfo } from "../helpers/block-info-details.js";
+import {
+  processMinLotSizeInfo,
+  processPlanDetailsInfo,
+  processZoningInfo,
+} from "../helpers/block-info-details.js";
 
 export default {
   name: "BlockInfo",
   props: ["addressCoord", "loadingStatus", "customData"],
   setup(props) {
     const { addressCoord, loadingStatus, customData } = toRefs(props);
-    const planDetails = ref("");
-    const zoningCode = ref([]);
-    const epiName = ref([]);
-    const lgaName = ref("");
+
+    const blockInfoState = ref({
+      planDetails: null,
+      zoningInfo: null,
+      minLotSize: null,
+    });
 
     onMounted(() => {
       const lotMap = L.map("lot-map", {
@@ -128,11 +146,19 @@ export default {
       watch([loadingStatus, customData], () => {
         if (!loadingStatus.value && customData.value.id != undefined) {
           // get lot details
-          const lotInfo = processLotInfo(customData.value.properties);
-          planDetails.value = lotInfo.planDetails;
-          zoningCode.value = lotInfo.zoningCode;
-          lgaName.value = lotInfo.lgaName;
-          epiName.value = lotInfo.epiName;
+          const planDetails = processPlanDetailsInfo(
+            customData.value.properties.planDetails
+          );
+          const zoningInfo = processZoningInfo(
+            customData.value.properties.zoning
+          );
+          const minSize = processMinLotSizeInfo(
+            customData.value.properties.minSize
+          );
+          // update state
+          blockInfoState.value.planDetails = planDetails;
+          blockInfoState.value.zoningInfo = zoningInfo;
+          blockInfoState.value.minLotSize = minSize;
 
           // move map to address
           lotMap.setView([addressCoord.value.lat, addressCoord.value.lon]);
@@ -161,10 +187,7 @@ export default {
     });
 
     return {
-      planDetails,
-      zoningCode,
-      epiName,
-      lgaName,
+      blockInfoState,
     };
   },
 };

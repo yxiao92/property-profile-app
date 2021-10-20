@@ -1,21 +1,64 @@
 <template>
   <!-- Modal Button -->
-  <div>
-    <button id="search-modal" @click="toggleModal" class="p-4">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
+  <!-- <div class="flex flex-auto items-center justify-between h-18 px-4"> -->
+  <!-- <button
+      id="search-modal"
+      @click="toggleModal"
+      class="group font-medium flex items-center 
+      space-x-2 sm:space-x-3 
+      text-gray-400 hover:text-gray-600 
+      transition-colors duration-200 
+      w-full py-2"
+    >
+      <svg width="24" height="24" fill="none">
         <path
+          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          stroke="currentColor"
+          stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
-          stroke-width="2"
-          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-        />
+        ></path>
       </svg>
+
+      <span
+        >Quick search
+        <span class="hidden sm:inline">
+          for any address
+        </span>
+      </span>
+    </button> -->
+  <div
+    class="flex-auto h-18 flex items-center justify-between px-4 sm:px-6 lg:mx-6 lg:px-0 xl:mx-8 "
+  >
+    <button
+      type="button"
+      @click="toggleModal"
+      class="group flex items-center 
+      w-full py-2
+      space-x-3 sm:space-x-4 
+      leading-6 font-medium text-gray-400 
+      hover:text-gray-600 transition-colors duration-200"
+    >
+      <svg width="24" height="24" fill="none">
+        <path
+          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        ></path></svg
+      ><span
+        >Quick search<span class="hidden sm:inline">
+          for any address</span
+        ></span
+      ><span
+        class="hidden sm:block text-gray-400 text-sm leading-5 py-0.5 px-1.5 border border-gray-300 rounded-md"
+        ><span class="sr-only">Press </span
+        ><kbd class="font-sans"
+          ><abbr title="Command" class="no-underline">⌘</abbr></kbd
+        ><span class="sr-only"> and </span><kbd class="font-sans">K</kbd
+        ><span class="sr-only"> to search</span></span
+      >
     </button>
   </div>
   <div
@@ -184,7 +227,6 @@ export default {
         // document.getElementById("property-info").classList.add("overflow:hidden");
         // document.body.classList.add("overflow-y-hidden");
         // console.log(document.getElementById("app"))
-
       }
       // document.getElementById("property-info").classList.remove("overflow-hidden");
       searchText.value = "";
