@@ -235,7 +235,8 @@ export default {
     const { addressCoord, loadingStatus, customData } = toRefs(props);
     const areaInfoState = ref({
       noiseLvl: 0,
-      noiseDesc: "",
+      noiseDesc:
+        "The site is located away from airfields, railways or major roads. It is not often to experience traffic noise.",
       powerLinesInfo: null,
     });
 

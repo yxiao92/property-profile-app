@@ -4,13 +4,11 @@ const state = reactive({
   counter: 100,
   isLoading: false,
   domainPropertyId: "",
-  // domainPropertyId: "RB-4744-TZ",
-  // gnafId: "GANSW719734974",
   gnafId: "",
   domainData:{},
   customData: {},
   addressCoord: {},
-  imgUrl: "",
+  imgUrl: null,
 });
 
 const methods = {

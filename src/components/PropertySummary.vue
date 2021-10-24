@@ -2,7 +2,19 @@
   <div
     class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl"
   >
-    <img class="h-60 w-full object-cover" :src="store.state.imgUrl" alt="" />
+    <div v-if="!!store.state.imgUrl">
+      <img class="h-60 w-full object-cover" :src="store.state.imgUrl" alt="" />
+    </div>
+    <div v-else class="relative">
+      <img class="h-60 w-full object-cover" src="/wave.svg" alt="" />
+      <span
+        class="absolute right-2 bottom-1 text-center text-xxs text-indigo-600 text-opacity-30"
+      >
+        <i class="px-1 fab fa-creative-commons"></i>
+        <a href="https://bgjar.com/">by BGJar</a>
+      </span>
+    </div>
+
     <div class="p-8">
       <!-- Status -->
       <div
@@ -50,18 +62,24 @@
 
         <!-- Bed -->
         <span id="bed" class="flex items-center">
-          <span class="mr-2 text-gray-800">{{ store.state.domainData.bedrooms }}</span>
+          <span class="mr-2 text-gray-800">{{
+            store.state.domainData.bedrooms ?? "-"
+          }}</span>
           <i class="fas fa-bed text-lg text-gray-800"></i>
         </span>
         <!-- Bath -->
         <span id="bath" class="flex items-center">
-          <span class="mr-2 text-gray-800">{{ store.state.domainData.bathrooms }}</span>
+          <span class="mr-2 text-gray-800">{{
+            store.state.domainData.bathrooms ?? "-"
+          }}</span>
           <i class="fas fa-bath text-md text-gray-800"></i>
         </span>
         <!-- Car -->
         <span id="car">
           <span id="bath" class="flex items-center">
-            <span class="mr-2 text-gray-800">{{ store.state.domainData.carSpaces }}</span>
+            <span class="mr-2 text-gray-800">{{
+              store.state.domainData.carSpaces ?? "-"
+            }}</span>
             <i class="fas fa-car text-lg text-gray-800"></i>
           </span>
         </span>

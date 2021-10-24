@@ -19,9 +19,11 @@ const getLotData = async (gnafId) => {
   const res = await axios(options);
   const data = await res.data;
 
-  console.log("lot info: ", data[0]["lot_profile"]);
+  if (data.length > 0) {
+    console.log("lot info: ", data[0]["lot_profile"]);
 
-  return data[0]["lot_profile"];
+    return data[0]["lot_profile"];
+  }
 };
 
 export { getLotData };

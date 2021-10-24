@@ -16,28 +16,17 @@
           :key="i"
           class="flex items-center mb-3"
         >
-          <h3 class="mr-3 text-md text-gray-800">
+          <h3 class="mr-3 text-sm text-gray-800">
             {{ school.schoolName }}
           </h3>
           <p
-            class="w-10 py-1
+            class="p-1
           bg-indigo-500 bg-opacity-80 
-          text-white text-xs text-center rounded-md"
+          text-white text-xs  text-center rounded-md"
           >
             {{ school.type }}
           </p>
         </div>
-
-        <!-- <h3 class="text-md text-gray-800">
-          Strathfield Girls High School
-        </h3>
-        <p
-          class="hidden md:block md:w-1/12 md:py-1
-          md:bg-indigo-500 md:bg-opacity-80 
-          md:text-white md:text-xs md:text-center md:rounded-md"
-        >
-          Girls
-        </p> -->
       </div>
     </div>
   </div>

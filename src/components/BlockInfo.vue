@@ -163,7 +163,12 @@ export default {
           // move map to address
           lotMap.setView([addressCoord.value.lat, addressCoord.value.lon]);
           // plot polygon
-          const lotPolygon = L.geoJSON(customData.value).addTo(lotMap);
+          const lotPolygon = L.geoJSON(customData.value, {
+            style: {
+              fillColor: "rgb(99, 102, 241)",
+              color: "rgb(99, 102, 241)",
+            },
+          }).addTo(lotMap);
           // add lot size label
           const lotAreaStr =
             String(
