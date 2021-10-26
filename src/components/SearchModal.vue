@@ -25,14 +25,15 @@
         >Quick search<span class="hidden sm:inline">
           for any address</span
         ></span
-      ><span
+      >
+      <!-- <span
         class="hidden sm:block text-gray-400 text-sm leading-5 py-0.5 px-1.5 border border-gray-300 rounded-md"
         ><span class="sr-only">Press </span
         ><kbd class="font-sans"
           ><abbr title="Command" class="no-underline">⌘</abbr></kbd
         ><span class="sr-only"> and </span><kbd class="font-sans">K</kbd
         ><span class="sr-only"> to search</span></span
-      >
+      > -->
     </button>
   </div>
   <!-- Modal Container -->
@@ -48,7 +49,7 @@
     v-if="showModal"
     class="
       fixed inset-x-0
-      px-4 w-5/6  
+      px-6 py-1 w-5/6  
       max-w-2xl mx-auto mt-20 mb-auto
       border-0 rounded-xl shadow-lg bg-white
       outline-none focus:outline-none
@@ -58,14 +59,13 @@
     <!-- Modal Content -->
     <!-- Search Bar -->
     <header
-      class="flex items-center justify-between m-2
-          border-b border-solid 
-          border-gray-400 rounded-t"
+      class="flex items-center justify-between
+          border-b border-solid border-gray-200 py-2"
     >
       <label for="search-input" id="search-label">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6"
+          class="h-6 w-6 text-indigo-500"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -89,33 +89,56 @@
         @keydown.esc="toggleModal"
         class="mx-2 py-2 px-4 w-full
               outline-none focus:outline-none
-              text-md
-              "
+              text-md"
         placeholder="Type an address"
       />
       <button @click="toggleModal">
-        <span
+        <!-- <span
           class="px-1.5 py-0.5 rounded-md bg-gray-50 text-gray-600 text-sm border"
         >
           esc
-        </span>
+        </span> -->
+        <i
+          class="fas fa-times
+          text-sm text-gray-400 hover:text-gray-600 transition-colors duration-200"
+        ></i>
       </button>
     </header>
     <!-- Search Results -->
-    <div class="relative mx-2 h-auto">
+    <div class="relative h-auto my-4">
       <p
-        v-if="searchText.length == 0"
-        class="my-4 text-gray-500 text-md leading-relaxed"
+        v-if="searchText.length < 5 && !showResults"
+        class="text-gray-500 text-md leading-relaxed"
       >
         No results
       </p>
+
       <p
-        v-if="searchText.length > 0 && searchResults.length == 0"
-        class="my-4 text-gray-500 text-md leading-relaxed"
+        v-if="searchText.length >= 5 && !showResults"
+        class="flex items-center text-gray-500 text-md leading-relaxed"
       >
+        <svg
+          class="animate-spin mr-3 h-5 w-5 text-indigo-500"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          ></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          ></path>
+        </svg>
         Loading ...
       </p>
-
       <ul v-show="showResults">
         <li
           v-for="(result, i) in searchResults"
@@ -123,11 +146,12 @@
           @mouseover="cursor = i"
           @mouseleave="cursor = -1"
           @click="onEnter"
-          class="flex items-center px-4 py-8 mb-2 h-11 bg-gray-50 rounded-md"
-          :class="{ 'bg-indigo-100': i === cursor }"
+          class="flex items-center px-4 py-8 my-2 h-11 bg-gray-50 rounded-md shadow-sm"
+          :class="{ 'bg-indigo-200': i === cursor }"
         >
           <div class="flex items-center">
-            <svg
+            <i class="fas fa-home hidden md:block mr-4 text-gray-600"></i>
+            <!-- <svg
               xmlns="http://www.w3.org/2000/svg"
               class="hidden md:block h-6 w-6 mr-4 text-gray-600"
               fill="none"
@@ -140,16 +164,16 @@
                 stroke-width="2"
                 d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
               />
-            </svg>
+            </svg> -->
             <div class="flex flex-col">
               <div class="flex">
                 <span
                   v-if="result.addressComponents.unitNumber.length > 0"
-                  class="md:text-lg"
+                  class="md:text-md"
                 >
                   {{ result.addressComponents.unitNumber }}/
                 </span>
-                <span class="md:text-lg">
+                <span class="md:text-md">
                   {{ result.addressComponents.streetNumber }}
                   {{ result.addressComponents.streetName }}
                   {{ result.addressComponents.streetTypeLong }}
@@ -215,8 +239,8 @@ export default {
       if (searchText.value.length < 10) {
         if (searchText.value.length == 0) {
           searchResults.value = [];
+          showResults.value = false;
         }
-        showResults.value = false;
       } else {
         const results = await getPropertyAddress(searchText.value, 5);
         if (results.length > 0) {
